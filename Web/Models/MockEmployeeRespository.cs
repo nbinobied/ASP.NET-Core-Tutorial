@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace Web.Models
 {
-    public class EmployeeRespository : IEmployeeRepository
+    public class MockEmployeeRespository : IEmployeeRepository
     {
         private List<Employee> _employeeList;
 
-        public EmployeeRespository()
+        public MockEmployeeRespository()
         {
             _employeeList = new List<Employee>()
             {
@@ -25,6 +25,16 @@ namespace Web.Models
             return employee;
         }
 
+        public Employee Delete(int id)
+        {
+            Employee employee = _employeeList.FirstOrDefault(e => e.Id == id);
+            if (employee != null)
+            {
+                _employeeList.Remove(employee);
+            }
+            return employee;
+        }
+
         public Employee GetEmployee(int id)
         {
             return _employeeList.Find(e => e.Id == id);
@@ -33,6 +43,18 @@ namespace Web.Models
         public IEnumerable<Employee> GetEmployees()
         {
             return _employeeList;
+        }
+
+        public Employee Update(Employee employee)
+        {
+            Employee ModifiedEmployee = _employeeList.FirstOrDefault(e => e.Id == employee.Id);
+            if (ModifiedEmployee != null)
+            {
+                ModifiedEmployee.Name = employee.Name;
+                ModifiedEmployee.Email = employee.Email;
+                ModifiedEmployee.Department = employee.Department;
+            }
+            return ModifiedEmployee;
         }
     }
 }
